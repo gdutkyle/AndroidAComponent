@@ -1,5 +1,6 @@
 package com.example.hao_wu.viewmodel;
 
+import android.app.Activity;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.Lifecycle;
@@ -40,9 +41,23 @@ public class UserViewModel extends AndroidViewModel {
         }
     }
 
-    public LiveData<List<User>> loadFiveUsers() {
-        return appDataBase.userDao().loadFiveUsers();
-
+    public void loadFiveUsers(Activity activity) {
+        appDataBase.userDao().loadFiveUsers().observe((LifecycleOwner) activity, new Observer<List<User>>() {
+            @Override
+            public void onChanged(@Nullable List<User> users) {
+                if (users == null) {
+                    return;
+                }
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < users.size(); i++) {
+                    User user = users.get(i);
+                    sb.append("====================\n");
+                    sb.append("uid:" + user.getUid() + "\n " + user.getUserName() + "\n" + user.getLastName() + "\n");
+                    sb.append("\n");
+                }
+                userLiveData.setValue(sb.toString());
+            }
+        });
     }
 
     public void insertOneData() {

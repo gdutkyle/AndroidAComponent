@@ -9,10 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.hao_wu.room.User;
 import com.example.hao_wu.viewmodel.UserViewModel;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     UserViewModel viewModel;
@@ -53,19 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
-        viewModel.loadFiveUsers().observe(MainActivity.this, new Observer<List<User>>() {
-            @Override
-            public void onChanged(@Nullable List<User> users) {
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < users.size(); i++) {
-                    User user = users.get(i);
-                    sb.append("====================\n");
-                    sb.append("uid:" + user.getUid() + "\n " + user.getUserName() + "\n" + user.getLastName() + "\n");
-                    sb.append("\n");
-                }
-                tv_values.setText(sb.toString());
-            }
-        });
+        viewModel.loadFiveUsers(MainActivity.this);
     }
 
 
